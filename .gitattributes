@@ -1,0 +1,12 @@
+* text=auto
+
+*.cs text
+*.sln text
+*.csproj text
+*.contentproj text
+Settings.StyleCop text
+
+*.png binary
+*.jpg binary
+*.bmp binary
+*.ico binary
