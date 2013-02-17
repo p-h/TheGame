@@ -127,6 +127,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="SpriteBase.cs" />
+    <Compile Include="StaticPhysicsComponent.cs" />
     <Compile Include="StaticPosition.cs" />
     <Compile Include="StaticSprite.cs" />
   </ItemGroup>
