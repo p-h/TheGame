@@ -6,7 +6,7 @@
   using Microsoft.Xna.Framework;
 
   /// <summary>
-  /// Manages all the <see cref="Physics"/> Components
+  /// Manages all the <see cref="MoveablePhysicsComponent"/> Components
   /// </summary>
   public class PhysicsSystem : GameComponent
   {
@@ -33,6 +33,8 @@
     {
       var collidables = this.getter();
 
+      this.UpdatePosition((float)gameTime.ElapsedGameTime.TotalSeconds, collidables.OfType<IMoveableComponent>());
+
       foreach (var c in collidables)
       {
         c.Colliding = false;
@@ -51,6 +53,22 @@
       }
 
       base.Update(gameTime);
+    }
+
+    /// <summary>
+    /// Updates the position of all the components
+    /// </summary>
+    /// <param name="dt">The time past since the last frame</param>
+    /// <param name="moveables">the components to update</param>
+    public void UpdatePosition(float dt, IEnumerable<IMoveableComponent> moveables)
+    {
+      var gravity = new Vector2(0f, 9.81f);
+      foreach (var p in moveables)
+      {
+        var oldVelocity = p.Velocity;
+        p.Velocity += gravity * dt;
+        p.Position += (oldVelocity + p.Velocity) / 2 * dt;
+      }
     }
   }
 }

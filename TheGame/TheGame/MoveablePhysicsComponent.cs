@@ -5,7 +5,7 @@
   /// <summary>
   /// PhysicsComponent is used to give an entity the ability to collide
   /// </summary>
-  public class Physics : IPositionableComponent, ICollidableComponent
+  public class MoveablePhysicsComponent : ICollidableComponent, IMoveableComponent
   {
     /// <summary>
     /// Position of this PhysicsComponent
@@ -23,12 +23,12 @@
     private int height;
 
     /// <summary>
-    /// Initializes a new instance of the <see cref="Physics"/> class
+    /// Initializes a new instance of the <see cref="MoveablePhysicsComponent"/> class
     /// </summary>
     /// <param name="position">The initial position of this PhysicsComponent</param>
     /// <param name="width">The Width of this PhysicsComponent</param>
     /// <param name="height">The Height of this PhysicsComponent</param>
-    public Physics(Vector2 position, int width, int height)
+    public MoveablePhysicsComponent(Vector2 position, int width, int height)
     {
       this.position = position;
       this.width = width;
@@ -39,6 +39,7 @@
     public Vector2 Position
     {
       get { return this.position; }
+      set { this.position = value; }
     }
 
     /// <inheritdoc/>
@@ -49,5 +50,11 @@
 
     /// <inheritdoc/>
     public bool Colliding { get; set; }
+
+    /// <inheritdoc />
+    public Vector2 Velocity { get; set; }
+
+    /// <inheritdoc />
+    public Vector2 Movement { get; set; }
   }
 }

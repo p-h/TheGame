@@ -117,11 +117,12 @@
     <Compile Include="IComponent.cs" />
     <Compile Include="IControllableComponent.cs" />
     <Compile Include="IDrawableComponent.cs" />
+    <Compile Include="IMoveableComponent.cs" />
     <Compile Include="InputSystem.cs" />
     <Compile Include="IPositionableComponent.cs" />
     <Compile Include="LayerDepths.cs" />
     <Compile Include="Level.cs" />
-    <Compile Include="Physics.cs" />
+    <Compile Include="MoveablePhysicsComponent.cs" />
     <Compile Include="PhysicsSystem.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Program.cs" />

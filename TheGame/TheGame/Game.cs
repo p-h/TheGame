@@ -73,8 +73,8 @@ namespace TheGame
 
       var backgroundTile = Content.Load<Texture2D>("background_tile");
 
-      this.entityManager.CreateEntity(new StaticSprite(backgroundTile, LayerDepths.Background), new Physics(Vector2.Zero, 64, 64));
-      this.entityManager.CreateEntity(new StaticSprite(backgroundTile, LayerDepths.Background), new Physics(new Vector2(64f, 64f), 64, 64));
+      this.entityManager.CreateEntity(new StaticSprite(backgroundTile, LayerDepths.Background), new MoveablePhysicsComponent(Vector2.Zero, 64, 64));
+      this.entityManager.CreateEntity(new StaticSprite(backgroundTile, LayerDepths.Background), new MoveablePhysicsComponent(new Vector2(64f, 64f), 64, 64));
 
       Components.Add(new DrawingSystem(this));
       Components.Add(new CollidableOverlay(this));
