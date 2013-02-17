@@ -36,7 +36,7 @@
       {
         sprite.TimeSinceLastFrame += (float)gameTime.ElapsedGameTime.TotalSeconds;
 
-        if (!sprite.Idle && sprite.TimeSinceLastFrame >= sprite.Fps)
+        if (!sprite.Idle && sprite.TimeSinceLastFrame >= sprite.FrameTime)
         {
           sprite.TimeSinceLastFrame = 0f;
           var currentSprite = sprite.CurrentSprite;

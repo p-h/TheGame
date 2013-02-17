@@ -19,10 +19,12 @@
     /// <param name="texture">Texture of this <see cref="AnimatedSprite"/></param>
     /// <param name="layerDepth">The Layer Depth at which this component should be drawn at</param>
     /// <param name="sourceRectangle">The sourceRectangle of this Sprite</param>
-    public AnimatedSprite(Texture2D texture, LayerDepths layerDepth, Rectangle sourceRectangle)
+    /// <param name="frametime">Amount of time between to animation frames</param>
+    public AnimatedSprite(Texture2D texture, LayerDepths layerDepth, Rectangle sourceRectangle, float frametime)
       : base(texture, layerDepth)
     {
       this.sourceRectangle = sourceRectangle;
+      this.FrameTime = frametime;
     }
 
     /// <inheritdoc />
@@ -51,8 +53,8 @@
     public bool Idle { get; set; }
 
     /// <summary>
-    /// Gets or sets the time between frames
+    /// Gets or sets the time between frames in seconds
     /// </summary>
-    public float Fps { get; set; }
+    public float FrameTime { get; set; }
   }
 }
