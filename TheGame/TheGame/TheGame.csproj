@@ -118,7 +118,7 @@
     <Compile Include="IControllableComponent.cs" />
     <Compile Include="IDrawableComponent.cs" />
     <Compile Include="InputSystem.cs" />
-    <Compile Include="IPositionComponent.cs" />
+    <Compile Include="IPositionableComponent.cs" />
     <Compile Include="LayerDepths.cs" />
     <Compile Include="Level.cs" />
     <Compile Include="Physics.cs" />

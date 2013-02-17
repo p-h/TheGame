@@ -18,7 +18,7 @@
     /// <summary>
     /// Function to get the <see cref="IDrawableComponent" /> and their position from the <see cref="EntityManager" />
     /// </summary>
-    private Func<IEnumerable<Tuple<IDrawableComponent, IPositionComponent>>> getter;
+    private Func<IEnumerable<Tuple<IDrawableComponent, IPositionableComponent>>> getter;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="DrawingSystem" /> class
@@ -28,11 +28,11 @@
       : base(game)
     {
       this.spriteBatch = game.SpriteBatch;
-      this.getter = game.EntityManager.GetComponents<IDrawableComponent, IPositionComponent>;
+      this.getter = game.EntityManager.GetComponents<IDrawableComponent, IPositionableComponent>;
     }
 
     /// <summary>
-    /// Gets all the <see cref="IDrawableComponent" /> and <see cref="IPositionComponent" />
+    /// Gets all the <see cref="IDrawableComponent" /> and <see cref="IPositionableComponent" />
     /// which belong to one entity and draws them to the screen
     /// </summary>
     /// <param name="gameTime">Provides a snapshot of timing values.</param>

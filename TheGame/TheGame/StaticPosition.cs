@@ -5,7 +5,7 @@
   /// <summary>
   /// StaticPosition is a Position Component that does not change
   /// </summary>
-  public class StaticPosition : IPositionComponent
+  public class StaticPosition : IPositionableComponent
   {
     /// <summary>
     /// Holds the Vector2 value of this position

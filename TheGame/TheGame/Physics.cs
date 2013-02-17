@@ -5,7 +5,7 @@
   /// <summary>
   /// PhysicsComponent is used to give an entity the ability to collide
   /// </summary>
-  public class Physics : IPositionComponent, ICollidableComponent
+  public class Physics : IPositionableComponent, ICollidableComponent
   {
     /// <summary>
     /// Position of this PhysicsComponent
