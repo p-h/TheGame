@@ -34,10 +34,32 @@
     /// Creates a new entity and adds components to it
     /// </summary>
     /// <param name="componentsToAdd">components that will be added to the entity</param>
-    public void CreateEntity(params IComponent[] componentsToAdd)
+    public void CreateEntity(IEnumerable<IComponent> componentsToAdd)
     {
       var newEntityId = this.CreateEntity();
       this.AddToEntity(newEntityId, componentsToAdd);
+    }
+
+    /// <summary>
+    /// Creates a new entity and adds components to it
+    /// </summary>
+    /// <param name="componentsToAdd">components that will be added to the entity</param>
+    public void CreateEntity(params IComponent[] componentsToAdd)
+    {
+      this.CreateEntity(componentsToAdd.AsEnumerable());
+    }
+
+    /// <summary>
+    /// Adds components to entities
+    /// </summary>
+    /// <param name="entityId">The ID of the entity</param>
+    /// <param name="componentsToAdd">The components to be added</param>
+    public void AddToEntity(uint entityId, IEnumerable<IComponent> componentsToAdd)
+    {
+      foreach (var c in componentsToAdd)
+      {
+        this.entities[entityId].Add(c);
+      }
     }
 
     /// <summary>
@@ -47,10 +69,7 @@
     /// <param name="componentsToAdd">The components to be added</param>
     public void AddToEntity(uint entityId, params IComponent[] componentsToAdd)
     {
-      foreach (var c in componentsToAdd)
-      {
-        this.entities[entityId].Add(c);
-      }
+      this.AddToEntity(entityId, componentsToAdd.AsEnumerable());
     }
 
     /// <summary>
