@@ -62,7 +62,7 @@
     public Point? Size { get; set; }
 
     /// <summary>
-    /// Gets or sets this entity's Colliding
+    /// Gets or sets a value indicating whether this entity is Colliding
     /// </summary>
     public bool? Colliding { get; set; }
 
@@ -92,7 +92,7 @@
     public float? TimeSinceLastFrame { get; set; }
 
     /// <summary>
-    /// Gets or sets this entity's Idle
+    /// Gets or sets a value indicating whether this entity is idle
     /// </summary>
     public bool? Idle { get; set; }
 
