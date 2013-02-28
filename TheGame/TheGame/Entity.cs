@@ -67,7 +67,7 @@
     public bool? Colliding { get; set; }
 
     /// <summary>
-    /// Gets or sets this entity's Colliding
+    /// Gets or sets this entity's <see cref="CollisionTypes"/>
     /// </summary>
     public CollisionTypes? CollisionType { get; set; }
 
