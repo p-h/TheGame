@@ -5,11 +5,18 @@
   using Microsoft.Xna.Framework;
 
   /// <summary>
-  /// Manages all the <see cref="MoveablePhysicsComponent"/> Components
+  /// Manages all the entities capable of physics
   /// </summary>
   public class PhysicsSystem : GameComponent
   {
+    /// <summary>
+    /// The gravity constant of this world
+    /// </summary>
     public readonly Vector2 Gravity = new Vector2(0f, 9.81f);
+
+    /// <summary>
+    /// The <see cref="EntityManager"/> of this <see cref="PhysicsSystem"/>
+    /// </summary>
     private EntityManager entityManager;
 
     /// <summary>
@@ -23,7 +30,8 @@
     }
 
     /// <summary>
-    /// Updates the positions and checks for collisions on the <see cref="ICollidableComponent"/>
+    /// Updates the positions and checks for collisions on the collidable
+    /// entities
     /// </summary>
     /// <inheritdoc select="param" />
     public override void Update(GameTime gameTime)
@@ -40,10 +48,10 @@
     }
 
     /// <summary>
-    /// Updates the position of all the components
+    /// Updates the position of all the entities
     /// </summary>
     /// <param name="dt">The time past since the last frame</param>
-    /// <param name="moveables">the components to update</param>
+    /// <param name="entities">the entities to update</param>
     public void UpdatePosition(float dt, IEnumerable<Entity> entities)
     {
       foreach (var e in entities)
@@ -59,6 +67,10 @@
       }
     }
 
+    /// <summary>
+    /// Detects collisions and acts upon them
+    /// </summary>
+    /// <param name="entities">The entities to check</param>
     private void HandleCollisions(IEnumerable<Entity> entities)
     {
       foreach (var c in entities)
@@ -86,6 +98,12 @@
       }
     }
 
+    /// <summary>
+    /// If a collision between two <see cref="Entity"/> occurs this method is
+    /// called and decides what to do
+    /// </summary>
+    /// <param name="e1">The first <see cref="Entity"/></param>
+    /// <param name="e2">The second <see cref="Entity"/></param>
     private void ActOnCollision(Entity e1, Entity e2)
     {
       switch (e1.CollisionType)

@@ -3,12 +3,12 @@
   using Microsoft.Xna.Framework;
 
   /// <summary>
-  /// This class takes of the animation in the <see cref="AnimatedSprite"/>
+  /// This class takes care of the entities capable of animating
   /// </summary>
   public class AnimationSystem : GameComponent
   {
     /// <summary>
-    /// This function gets all the <see cref="AnimatedSpriteaa"/>
+    /// The <see cref="EntityManager"/> of this <see cref="AnimationSystem"/>
     /// </summary>
     private EntityManager entityManager;
 

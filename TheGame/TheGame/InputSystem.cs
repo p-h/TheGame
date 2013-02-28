@@ -29,7 +29,7 @@
     }
 
     /// <summary>
-    /// Gets input and dispatches it to the controllable components
+    /// Gets input and dispatches it to the controllable entities
     /// </summary>
     /// <param name="gameTime">Provides a snapshot of timing values.</param>
     public override void Update(GameTime gameTime)

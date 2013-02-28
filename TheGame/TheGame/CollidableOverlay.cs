@@ -4,7 +4,7 @@
   using Microsoft.Xna.Framework.Graphics;
 
   /// <summary>
-  /// Draws an overlay for all <see cref="ICollidableComponent"/>
+  /// Draws an overlay for all the entities that can collide
   /// </summary>
   public class CollidableOverlay : DrawableGameComponent
   {

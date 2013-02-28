@@ -14,7 +14,7 @@
     private SpriteBatch spriteBatch;
 
     /// <summary>
-    /// Function to get the <see cref="IDrawableComponent" /> and their position from the <see cref="EntityManager" />
+    /// The <see cref="EntityManager" /> of this <see cref="DrawingSystem"/>
     /// </summary>
     private EntityManager entityManager;
 
@@ -30,8 +30,8 @@
     }
 
     /// <summary>
-    /// Gets all the <see cref="IDrawableComponent" /> and <see cref="IPositionableComponent" />
-    /// which belong to one entity and draws them to the screen
+    /// Gets all the entities capable of being drawn and draws them to the
+    /// screen
     /// </summary>
     /// <param name="gameTime">Provides a snapshot of timing values.</param>
     public override void Draw(GameTime gameTime)
