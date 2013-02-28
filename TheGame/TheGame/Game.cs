@@ -32,7 +32,6 @@ namespace TheGame
       Content.RootDirectory = "Content";
 
       this.entityManager = new EntityManager();
-      Components.Add(this.EntityManager);
     }
 
     /// <summary>
@@ -74,16 +73,38 @@ namespace TheGame
       var backgroundTile = Content.Load<Texture2D>("background_tile");
       var kat = Content.Load<Texture2D>("kat");
 
-      this.entityManager.CreateEntity(new StaticSprite(backgroundTile, LayerDepths.Background), new StaticPhysicsComponent(Vector2.Zero, 64, 64));
-      this.entityManager.CreateEntity(new StaticSprite(backgroundTile, LayerDepths.Background), new StaticPhysicsComponent(new Vector2(64f, 64f), 64, 64));
-      this.entityManager.CreateEntity(
-        new AnimatedSprite(kat, LayerDepths.Characters, new Rectangle(0, 0, 64, 64), .1f),
-        new MoveablePhysicsComponent(Vector2.Zero, 64, 64));
+      for (var i = 0; i <= Window.ClientBounds.Width; i += 64)
+      {
+        var tile = this.entityManager.CreateEntity();
+        tile.Texture = backgroundTile;
+        tile.LayerDepth = (float)LayerDepths.Background / 10f;
+        tile.Position = new Vector2(i, Window.ClientBounds.Height - backgroundTile.Height);
+        tile.Size = new Point(backgroundTile.Bounds.X, backgroundTile.Bounds.Y);
+        tile.Colliding = false;
+        tile.CollisionType = CollisionTypes.Stop;
+        tile.Size = new Point(64, 64);
+      }
+
+      var playerEntity = this.entityManager.CreateEntity();
+      playerEntity.Position = Vector2.Zero;
+      playerEntity.Velocity = Vector2.Zero;
+      playerEntity.Movement = Vector2.Zero;
+      playerEntity.Acceleration = 200f;
+      playerEntity.SourceRectangle = new Rectangle(0, 0, 64, 64);
+      playerEntity.Idle = false;
+      playerEntity.TimeSinceLastFrame = 0f;
+      playerEntity.FrameTime = .1f;
+      playerEntity.Texture = kat;
+      playerEntity.LayerDepth = (float)LayerDepths.Characters / 10f;
+      playerEntity.Colliding = false;
+      playerEntity.CollisionType = CollisionTypes.None;
+      playerEntity.Size = new Point(64, 64);
 
       Components.Add(new DrawingSystem(this));
       Components.Add(new CollidableOverlay(this));
       Components.Add(new PhysicsSystem(this));
       Components.Add(new AnimationSystem(this));
+      Components.Add(new InputSystem(this));
     }
 
     /// <summary>

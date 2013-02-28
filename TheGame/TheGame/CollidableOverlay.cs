@@ -1,7 +1,5 @@
 ﻿namespace TheGame
 {
-  using System;
-  using System.Collections.Generic;
   using Microsoft.Xna.Framework;
   using Microsoft.Xna.Framework.Graphics;
 
@@ -21,9 +19,9 @@
     private SpriteBatch spriteBatch;
 
     /// <summary>
-    /// The function used to get all the <see cref="ICollidableComponent"/>
+    /// The <see cref="EntityManager"/> of this <see cref="CollidableOverlay"/>
     /// </summary>
-    private Func<IEnumerable<ICollidableComponent>> getter;
+    private EntityManager entityManager;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="CollidableOverlay" /> class
@@ -35,7 +33,7 @@
       this.spriteBatch = game.SpriteBatch;
       this.dummyTexture = new Texture2D(game.GraphicsDevice, 1, 1);
       this.dummyTexture.SetData(new[] { Color.White });
-      this.getter = game.EntityManager.GetComponents<ICollidableComponent>;
+      this.entityManager = game.EntityManager;
     }
 
     /// <summary>
@@ -44,17 +42,21 @@
     /// <param name="gameTime">Provides a snapshot of timing values.</param>
     public override void Draw(GameTime gameTime)
     {
-      var collidables = this.getter();
+      var entities = this.entityManager.GetEntitiesWhere(e =>
+        e.Position.HasValue &&
+        e.Size.HasValue &&
+        e.Colliding.HasValue);
 
       this.spriteBatch.Begin(SpriteSortMode.FrontToBack, BlendState.AlphaBlend);
 
-      foreach (var collidable in collidables)
+      foreach (var entity in entities)
       {
+        var bounds = new Rectangle((int)entity.Position.Value.X, (int)entity.Position.Value.Y, entity.Size.Value.X, entity.Size.Value.Y);
         this.spriteBatch.Draw(
           this.dummyTexture,
-          collidable.Bounds,
+          bounds,
           null,
-          (collidable.Colliding ? Color.Red : Color.White) * .5f,
+          (entity.Colliding.Value ? Color.Red : Color.White) * .5f,
           0f,
           Vector2.Zero,
           SpriteEffects.None,

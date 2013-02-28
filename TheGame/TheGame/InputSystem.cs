@@ -1,7 +1,5 @@
 ﻿namespace TheGame
 {
-  using System;
-  using System.Collections.Generic;
   using Microsoft.Xna.Framework;
   using Microsoft.Xna.Framework.Input;
 
@@ -16,9 +14,9 @@
     private KeyboardState keyboardState;
 
     /// <summary>
-    /// Gets all the <see cref="IControllableComponent"/>
+    /// The <see cref="EntityManager"/> if this <see cref="InputSystem"/>
     /// </summary>
-    private Func<IEnumerable<IControllableComponent>> getter;
+    private EntityManager entityManager;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="InputSystem"/> class
@@ -27,7 +25,7 @@
     public InputSystem(Game game)
       : base(game)
     {
-      this.getter = game.EntityManager.GetComponents<IControllableComponent>;
+      this.entityManager = game.EntityManager;
     }
 
     /// <summary>
@@ -36,34 +34,35 @@
     /// <param name="gameTime">Provides a snapshot of timing values.</param>
     public override void Update(GameTime gameTime)
     {
-      var controllables = this.getter();
       this.keyboardState = Keyboard.GetState();
 
-      foreach (var controllable in controllables)
+      var entities = this.entityManager.GetEntitiesWhere(e => e.Movement.HasValue);
+
+      foreach (var entity in entities)
       {
-        var movement = Point.Zero;
+        var movement = Vector2.Zero;
 
         if (this.keyboardState.IsKeyDown(Keys.W))
         {
-          movement.Y = 1;
+          movement.Y = -1f;
         }
 
         if (this.keyboardState.IsKeyDown(Keys.S))
         {
-          movement.Y = -1;
+          movement.Y = 1f;
         }
 
         if (this.keyboardState.IsKeyDown(Keys.A))
         {
-          movement.X = -1;
+          movement.X = -1f;
         }
 
         if (this.keyboardState.IsKeyDown(Keys.D))
         {
-          movement.X = 1;
+          movement.X = 1f;
         }
 
-        controllable.Movement = movement;
+        entity.Movement = movement;
       }
 
       base.Update(gameTime);

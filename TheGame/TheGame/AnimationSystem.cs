@@ -1,7 +1,5 @@
 ﻿namespace TheGame
 {
-  using System;
-  using System.Collections.Generic;
   using Microsoft.Xna.Framework;
 
   /// <summary>
@@ -12,7 +10,7 @@
     /// <summary>
     /// This function gets all the <see cref="AnimatedSpriteaa"/>
     /// </summary>
-    private Func<IEnumerable<AnimatedSprite>> getter;
+    private EntityManager entityManager;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="AnimationSystem"/> class
@@ -21,7 +19,7 @@
     public AnimationSystem(Game game)
       : base(game)
     {
-      this.getter = game.EntityManager.GetComponents<AnimatedSprite>;
+      this.entityManager = game.EntityManager;
     }
 
     /// <summary>
@@ -30,27 +28,32 @@
     /// <inheritdoc select="param" />
     public override void Update(GameTime gameTime)
     {
-      var sprites = this.getter();
+      var entities = this.entityManager.GetEntitiesWhere(e =>
+        e.Texture != null &&
+        e.FrameTime.HasValue &&
+        e.TimeSinceLastFrame.HasValue &&
+        e.SourceRectangle.HasValue &&
+        e.Idle.HasValue);
 
-      foreach (var sprite in sprites)
+      foreach (var entity in entities)
       {
-        sprite.TimeSinceLastFrame += (float)gameTime.ElapsedGameTime.TotalSeconds;
+        entity.TimeSinceLastFrame += (float)gameTime.ElapsedGameTime.TotalSeconds;
 
-        if (!sprite.Idle && sprite.TimeSinceLastFrame >= sprite.FrameTime)
+        if (!entity.Idle.Value && entity.TimeSinceLastFrame >= entity.FrameTime)
         {
-          sprite.TimeSinceLastFrame = 0f;
-          var currentSprite = sprite.CurrentSprite;
+          entity.TimeSinceLastFrame = 0f;
+          var sourceRectangle = entity.SourceRectangle.Value;
 
-          if (sprite.CurrentSprite.Right < sprite.Texture.Width)
+          if (sourceRectangle.Right < entity.Texture.Width)
           {
-            currentSprite.Offset(sprite.CurrentSprite.Width, 0);
+            sourceRectangle.X += sourceRectangle.Width;
           }
           else
           {
-            currentSprite.X = 0;
+            sourceRectangle.X = 0;
           }
 
-          sprite.CurrentSprite = currentSprite;
+          entity.SourceRectangle = sourceRectangle;
         }
       }
 

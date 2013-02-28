@@ -1,7 +1,5 @@
 ﻿namespace TheGame
 {
-  using System;
-  using System.Collections.Generic;
   using Microsoft.Xna.Framework;
   using Microsoft.Xna.Framework.Graphics;
 
@@ -18,7 +16,7 @@
     /// <summary>
     /// Function to get the <see cref="IDrawableComponent" /> and their position from the <see cref="EntityManager" />
     /// </summary>
-    private Func<IEnumerable<Tuple<IDrawableComponent, IPositionableComponent>>> getter;
+    private EntityManager entityManager;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="DrawingSystem" /> class
@@ -28,7 +26,7 @@
       : base(game)
     {
       this.spriteBatch = game.SpriteBatch;
-      this.getter = game.EntityManager.GetComponents<IDrawableComponent, IPositionableComponent>;
+      this.entityManager = game.EntityManager;
     }
 
     /// <summary>
@@ -40,20 +38,23 @@
     {
       this.spriteBatch.Begin(SpriteSortMode.FrontToBack, BlendState.AlphaBlend);
 
-      foreach (var data in this.getter())
+      var entities = this.entityManager.GetEntitiesWhere(e =>
+        e.Position.HasValue &&
+        e.Texture != null &&
+        e.LayerDepth.HasValue);
+
+      foreach (var entity in entities)
       {
-        var drawable = data.Item1;
-        var position = data.Item2.Position;
         this.spriteBatch.Draw(
-          drawable.Texture,
-          position,
-          drawable.SourceRectangle,
+          entity.Texture,
+          entity.Position.Value,
+          entity.SourceRectangle,
           Color.White,
           0f,
           Vector2.Zero,
           1f,
           SpriteEffects.None,
-          drawable.LayerDepth);
+          entity.LayerDepth.Value);
       }
 
       this.spriteBatch.End();

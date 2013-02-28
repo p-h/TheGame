@@ -107,29 +107,18 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AnimatedSprite.cs" />
     <Compile Include="AnimationSystem.cs" />
     <Compile Include="CollidableOverlay.cs" />
+    <Compile Include="CollisionTypes.cs" />
     <Compile Include="DrawingSystem.cs" />
+    <Compile Include="Entity.cs" />
     <Compile Include="EntityManager.cs" />
     <Compile Include="Game.cs" />
-    <Compile Include="ICollidableComponent.cs" />
-    <Compile Include="IComponent.cs" />
-    <Compile Include="IControllableComponent.cs" />
-    <Compile Include="IDrawableComponent.cs" />
-    <Compile Include="IMoveableComponent.cs" />
     <Compile Include="InputSystem.cs" />
-    <Compile Include="IPositionableComponent.cs" />
     <Compile Include="LayerDepths.cs" />
-    <Compile Include="Level.cs" />
-    <Compile Include="MoveablePhysicsComponent.cs" />
     <Compile Include="PhysicsSystem.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Program.cs" />
-    <Compile Include="SpriteBase.cs" />
-    <Compile Include="StaticPhysicsComponent.cs" />
-    <Compile Include="StaticPosition.cs" />
-    <Compile Include="StaticSprite.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Game.ico" />

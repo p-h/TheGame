@@ -1,6 +1,5 @@
 ﻿namespace TheGame
 {
-  using System;
   using System.Collections.Generic;
   using System.Linq;
   using Microsoft.Xna.Framework;
@@ -10,10 +9,8 @@
   /// </summary>
   public class PhysicsSystem : GameComponent
   {
-    /// <summary>
-    /// A function to get all the <see cref="ICollidableComponent"/>
-    /// </summary>
-    private Func<IEnumerable<ICollidableComponent>> getter;
+    public readonly Vector2 Gravity = new Vector2(0f, 9.81f);
+    private EntityManager entityManager;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="PhysicsSystem"/> class
@@ -22,7 +19,7 @@
     public PhysicsSystem(Game game)
       : base(game)
     {
-      this.getter = game.EntityManager.GetComponents<ICollidableComponent>;
+      this.entityManager = game.EntityManager;
     }
 
     /// <summary>
@@ -31,26 +28,13 @@
     /// <inheritdoc select="param" />
     public override void Update(GameTime gameTime)
     {
-      var collidables = this.getter();
+      var dt = (float)gameTime.ElapsedGameTime.TotalSeconds;
 
-      this.UpdatePosition((float)gameTime.ElapsedGameTime.TotalSeconds, collidables.OfType<IMoveableComponent>());
+      var toUpdatePosition = this.entityManager.GetEntitiesWhere(e => e.Position.HasValue && e.Velocity.HasValue);
+      var toHandleCollision = this.entityManager.GetEntitiesWhere(e => e.Position.HasValue && e.Size.HasValue);
 
-      foreach (var c in collidables)
-      {
-        c.Colliding = false;
-      }
-
-      for (var i = 0; i < collidables.Count() - 1; i++)
-      {
-        var c1 = collidables.ElementAt(i);
-        for (var j = i + 1; j < collidables.Count(); j++)
-        {
-          var c2 = collidables.ElementAt(j);
-          var colliding = c1.Bounds.Intersects(c2.Bounds);
-          c1.Colliding = c1.Colliding || colliding;
-          c2.Colliding = c2.Colliding || colliding;
-        }
-      }
+      this.UpdatePosition(dt, toUpdatePosition);
+      this.HandleCollisions(toHandleCollision);
 
       base.Update(gameTime);
     }
@@ -60,14 +44,60 @@
     /// </summary>
     /// <param name="dt">The time past since the last frame</param>
     /// <param name="moveables">the components to update</param>
-    public void UpdatePosition(float dt, IEnumerable<IMoveableComponent> moveables)
+    public void UpdatePosition(float dt, IEnumerable<Entity> entities)
     {
-      var gravity = new Vector2(0f, 9.81f);
-      foreach (var p in moveables)
+      foreach (var e in entities)
       {
-        var oldVelocity = p.Velocity;
-        p.Velocity += gravity * dt;
-        p.Position += (oldVelocity + p.Velocity) / 2 * dt;
+        if (e.Acceleration.HasValue && e.Movement.HasValue)
+        {
+          e.Velocity += dt * e.Movement * e.Acceleration;
+        }
+
+        var oldVelocity = e.Velocity;
+        e.Velocity += this.Gravity * dt;
+        e.Position += (oldVelocity + e.Velocity) / 2 * dt;
+      }
+    }
+
+    private void HandleCollisions(IEnumerable<Entity> entities)
+    {
+      foreach (var c in entities)
+      {
+        c.Colliding = false;
+      }
+
+      for (var i = 0; i < entities.Count() - 1; i++)
+      {
+        var entity1 = entities.ElementAt(i);
+        var bounds1 = new Rectangle((int)entity1.Position.Value.X, (int)entity1.Position.Value.Y, entity1.Size.Value.X, entity1.Size.Value.Y);
+        for (var j = i + 1; j < entities.Count(); j++)
+        {
+          var entity2 = entities.ElementAt(j);
+          var bounds2 = new Rectangle((int)entity2.Position.Value.X, (int)entity2.Position.Value.Y, entity2.Size.Value.X, entity2.Size.Value.Y);
+          if (bounds1.Intersects(bounds2))
+          {
+            entity1.Colliding = true;
+            entity2.Colliding = true;
+
+            this.ActOnCollision(entity1, entity2);
+            this.ActOnCollision(entity2, entity1);
+          }
+        }
+      }
+    }
+
+    private void ActOnCollision(Entity e1, Entity e2)
+    {
+      switch (e1.CollisionType)
+      {
+        case CollisionTypes.Stop:
+          e2.Velocity = Vector2.Zero;
+          break;
+        case CollisionTypes.None:
+          break;
+        case CollisionTypes.Kill:
+          this.entityManager.RemoveEntity(e2.Id);
+          break;
       }
     }
   }
