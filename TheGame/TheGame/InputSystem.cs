@@ -47,14 +47,14 @@
           movement.Y = -1f;
         }
 
-        if (this.keyboardState.IsKeyDown(Keys.S))
-        {
-          movement.Y = 1f;
-        }
-
         if (this.keyboardState.IsKeyDown(Keys.A))
         {
           movement.X = -1f;
+        }
+
+        if (this.keyboardState.IsKeyDown(Keys.S))
+        {
+          movement.Y = 1f;
         }
 
         if (this.keyboardState.IsKeyDown(Keys.D))

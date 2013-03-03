@@ -1,6 +1,7 @@
 ﻿namespace TheGame
 {
   using System.Collections.Generic;
+  using System.Diagnostics;
   using System.Linq;
   using Microsoft.Xna.Framework;
 
@@ -9,6 +10,11 @@
   /// </summary>
   public class PhysicsSystem : GameComponent
   {
+    /// <summary>
+    /// How many pixels are one meter
+    /// </summary>
+    public const int OneMeterInPixels = 128;
+
     /// <summary>
     /// The gravity constant of this world
     /// </summary>
@@ -56,14 +62,31 @@
     {
       foreach (var e in entities)
       {
-        if (e.Acceleration.HasValue && e.Movement.HasValue)
+        if (e.Acceleration.HasValue && e.Movement.HasValue && e.IsInAir == false)
         {
-          e.Velocity += dt * e.Movement * e.Acceleration;
+          var additionalVelocityX = e.Movement.Value.X * e.Acceleration.Value * dt;
+
+          e.Velocity += new Vector2(additionalVelocityX, 0f);
         }
 
         var oldVelocity = e.Velocity;
-        e.Velocity += this.Gravity * dt;
-        e.Position += (oldVelocity + e.Velocity) / 2 * dt;
+
+        if (e.IsInAir == true)
+        {
+          e.Velocity += this.Gravity * dt;
+        }
+        else if (e.IsInAir == false)
+        {
+          e.Velocity += e.Velocity.Value.X * Vector2.UnitX * e.GroundResistance * dt;
+          if (e.JumpAcceleration.HasValue && e.Movement.HasValue && e.Movement.Value.Y < -.5f)
+          {
+            e.IsInAir = true;
+
+            e.Velocity += Vector2.UnitY * e.JumpAcceleration.Value;
+          }
+        }
+
+        e.Position += OneMeterInPixels * (oldVelocity + e.Velocity) / 2 * dt;
       }
     }
 
@@ -81,12 +104,10 @@
       for (var i = 0; i < entities.Count() - 1; i++)
       {
         var entity1 = entities.ElementAt(i);
-        var bounds1 = new Rectangle((int)entity1.Position.Value.X, (int)entity1.Position.Value.Y, entity1.Size.Value.X, entity1.Size.Value.Y);
         for (var j = i + 1; j < entities.Count(); j++)
         {
           var entity2 = entities.ElementAt(j);
-          var bounds2 = new Rectangle((int)entity2.Position.Value.X, (int)entity2.Position.Value.Y, entity2.Size.Value.X, entity2.Size.Value.Y);
-          if (bounds1.Intersects(bounds2))
+          if (entity1.Bounds.Value.Intersects(entity2.Bounds.Value))
           {
             entity1.Colliding = true;
             entity2.Colliding = true;
@@ -109,7 +130,27 @@
       switch (e1.CollisionType)
       {
         case CollisionTypes.Stop:
-          e2.Velocity = Vector2.Zero;
+          if (e2.Velocity.HasValue)
+          {
+            var velocity2 = e2.Velocity.Value;
+            switch (CollisionSide(e2.Bounds.Value, e1.Bounds.Value))
+            {
+              case CollisionSides.FromAbove:
+                velocity2.Y = velocity2.Y > 0f ? 0f : velocity2.Y;
+                e2.IsInAir = false;
+                break;
+              case CollisionSides.FromLeft:
+                velocity2.X = velocity2.X < 0f ? 0f : velocity2.X;
+                break;
+              case CollisionSides.FromBelow:
+                velocity2.Y = velocity2.Y < 0f ? 0f : velocity2.Y;
+                break;
+              case CollisionSides.FromRight:
+                velocity2.X = velocity2.X > 0f ? 0f : velocity2.X;
+                break;
+            }
+            e2.Velocity = velocity2;
+          }
           break;
         case CollisionTypes.None:
           break;
@@ -117,6 +158,23 @@
           this.entityManager.RemoveEntity(e2.Id);
           break;
       }
+    }
+
+    /// <summary>
+    /// Calculates the side from which <paramref name="rectangle1"/> collides with
+    /// <paramref name="rectangle2"/>
+    /// </summary>
+    /// <param name="rectangle1">first rectangle</param>
+    /// <param name="rectangle2">second rectangle</param>
+    /// <returns>The collision side</returns>
+    private static CollisionSides CollisionSide(Rectangle rectangle1, Rectangle rectangle2)
+    {
+      Debug.Assert(rectangle1.Intersects(rectangle2), "The two entities have to be colliding");
+
+      return rectangle1.Top < rectangle2.Bottom ? CollisionSides.FromAbove
+           : rectangle1.Left < rectangle2.Right ? CollisionSides.FromLeft
+           : rectangle1.Bottom < rectangle2.Top ? CollisionSides.FromBelow
+                                                : CollisionSides.FromRight;
     }
   }
 }

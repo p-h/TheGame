@@ -67,6 +67,34 @@
     public bool? Colliding { get; set; }
 
     /// <summary>
+    /// Gets this entity's collision bounds
+    /// </summary>
+    public Rectangle? Bounds
+    {
+      get
+      {
+        return this.Position.HasValue && this.Size.HasValue ?
+          new Rectangle((int)this.Position.Value.X, (int)this.Position.Value.Y, this.Size.Value.X, this.Size.Value.Y) :
+          (Rectangle?)null;
+      }
+    }
+
+    /// <summary>
+    /// Gets or sets a value indicating whether this entity is in the air
+    /// </summary>
+    public bool? IsInAir { get; set; }
+
+    /// <summary>
+    /// Gets or sets the jump acceleration
+    /// </summary>
+    public float? JumpAcceleration { get; set; }
+
+    /// <summary>
+    /// Gets or sets the ground resistance
+    /// </summary>
+    public float? GroundResistance { get; set; }
+
+    /// <summary>
     /// Gets or sets this entity's <see cref="CollisionTypes"/>
     /// </summary>
     public CollisionTypes? CollisionType { get; set; }

@@ -85,11 +85,21 @@ namespace TheGame
         tile.Size = new Point(64, 64);
       }
 
+      var leftTile = this.entityManager.CreateEntity();
+      leftTile.Texture = backgroundTile;
+      leftTile.LayerDepth = (float)LayerDepths.Background / 10f;
+      leftTile.Position = new Vector2(Window.ClientBounds.Width - 64, Window.ClientBounds.Height - 64 - backgroundTile.Height);
+      leftTile.Size = new Point(backgroundTile.Bounds.X, backgroundTile.Bounds.Y);
+      leftTile.Colliding = false;
+      leftTile.CollisionType = CollisionTypes.Stop;
+      leftTile.Size = new Point(64, 64);
+
       var playerEntity = this.entityManager.CreateEntity();
       playerEntity.Position = Vector2.Zero;
       playerEntity.Velocity = Vector2.Zero;
       playerEntity.Movement = Vector2.Zero;
-      playerEntity.Acceleration = 200f;
+      playerEntity.Acceleration = 10f;
+      playerEntity.GroundResistance = .5f;
       playerEntity.SourceRectangle = new Rectangle(0, 0, 64, 64);
       playerEntity.Idle = false;
       playerEntity.TimeSinceLastFrame = 0f;
@@ -99,11 +109,13 @@ namespace TheGame
       playerEntity.Colliding = false;
       playerEntity.CollisionType = CollisionTypes.None;
       playerEntity.Size = new Point(64, 64);
+      playerEntity.IsInAir = true;
+      playerEntity.JumpAcceleration = -5f;
 
       Components.Add(new DrawingSystem(this));
       Components.Add(new CollidableOverlay(this));
       Components.Add(new PhysicsSystem(this));
-      Components.Add(new AnimationSystem(this));
+      /*Components.Add(new AnimationSystem(this));*/
       Components.Add(new InputSystem(this));
     }
 
