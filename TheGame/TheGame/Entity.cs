@@ -67,11 +67,6 @@
     public bool? Colliding { get; set; }
 
     /// <summary>
-    /// Gets or sets this entity's <see cref="CollisionTypes"/>
-    /// </summary>
-    public CollisionTypes? CollisionType { get; set; }
-
-    /// <summary>
     /// Gets or sets this entity's Texture
     /// </summary>
     public Texture2D Texture { get; set; }

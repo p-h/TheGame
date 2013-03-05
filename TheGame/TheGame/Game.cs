@@ -81,7 +81,6 @@ namespace TheGame
         tile.Position = new Vector2(i, Window.ClientBounds.Height - backgroundTile.Height);
         tile.Size = new Point(backgroundTile.Bounds.X, backgroundTile.Bounds.Y);
         tile.Colliding = false;
-        tile.CollisionType = CollisionTypes.Stop;
         tile.Size = new Point(64, 64);
       }
 
@@ -97,7 +96,6 @@ namespace TheGame
       playerEntity.Texture = kat;
       playerEntity.LayerDepth = (float)LayerDepths.Characters / 10f;
       playerEntity.Colliding = false;
-      playerEntity.CollisionType = CollisionTypes.None;
       playerEntity.Size = new Point(64, 64);
 
       Components.Add(new DrawingSystem(this));

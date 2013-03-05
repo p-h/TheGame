@@ -109,7 +109,6 @@
   <ItemGroup>
     <Compile Include="AnimationSystem.cs" />
     <Compile Include="CollidableOverlay.cs" />
-    <Compile Include="CollisionTypes.cs" />
     <Compile Include="DrawingSystem.cs" />
     <Compile Include="Entity.cs" />
     <Compile Include="EntityManager.cs" />
@@ -152,6 +151,10 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\..\box2dxna-62331\Box2D.XNA\Box2D.XNA - windows.csproj">
+      <Project>{22791486-E721-4511-AA4B-DA26CF5D0F2E}</Project>
+      <Name>Box2D.XNA - windows</Name>
+    </ProjectReference>
     <ProjectReference Include="..\TheGameContent\TheGameContent.contentproj">
       <Project>{5C036CAB-B135-466E-97D2-830C1BEB7DF7}</Project>
       <Name>TheGameContent %28Content%29</Name>
