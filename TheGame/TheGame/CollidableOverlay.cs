@@ -44,8 +44,8 @@
     {
       var entities = this.entityManager.GetEntitiesWhere(e =>
         e.Position.HasValue &&
-        e.Size.HasValue &&
-        e.Colliding.HasValue);
+        e.Size.HasValue /*&&
+        e.Colliding.HasValue*/);
 
       this.spriteBatch.Begin(SpriteSortMode.FrontToBack, BlendState.AlphaBlend);
 
@@ -56,7 +56,7 @@
           this.dummyTexture,
           bounds,
           null,
-          (entity.Colliding.Value ? Color.Red : Color.White) * .5f,
+          (/*entity.Colliding.Value */ false ? Color.Red : Color.White) * .5f,
           0f,
           Vector2.Zero,
           SpriteEffects.None,

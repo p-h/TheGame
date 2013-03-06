@@ -1,5 +1,6 @@
 ﻿namespace TheGame
 {
+  using Box2D.XNA;
   using Microsoft.Xna.Framework;
 
   /// <summary>
@@ -17,6 +18,8 @@
     /// </summary>
     private EntityManager entityManager;
 
+    private World world;
+
     /// <summary>
     /// Initializes a new instance of the <see cref="PhysicsSystem"/> class
     /// </summary>
@@ -25,6 +28,24 @@
       : base(game)
     {
       this.entityManager = game.EntityManager;
+      this.world = new World(this.Gravity, true);
+    }
+
+    public World World
+    {
+      get { return this.world; }
+    }
+
+    public override void Initialize()
+    {
+      base.Initialize();
+    }
+
+    public override void Update(GameTime gameTime)
+    {
+      this.world.Step((float)gameTime.ElapsedGameTime.TotalSeconds, 1, 1);
+
+      base.Update(gameTime);
     }
   }
 }

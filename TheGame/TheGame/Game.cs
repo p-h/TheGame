@@ -1,5 +1,6 @@
 namespace TheGame
 {
+  using Box2D.XNA;
   using Microsoft.Xna.Framework;
   using Microsoft.Xna.Framework.Graphics;
 
@@ -73,19 +74,22 @@ namespace TheGame
       var backgroundTile = Content.Load<Texture2D>("background_tile");
       var kat = Content.Load<Texture2D>("kat");
 
+      var physicsSystem = new PhysicsSystem(this);
+
       for (var i = 0; i <= Window.ClientBounds.Width; i += 64)
       {
         var tile = this.entityManager.CreateEntity();
         tile.Texture = backgroundTile;
         tile.LayerDepth = (float)LayerDepths.Background / 10f;
-        tile.Position = new Vector2(i, Window.ClientBounds.Height - backgroundTile.Height);
         tile.Size = new Point(backgroundTile.Bounds.X, backgroundTile.Bounds.Y);
-        tile.Colliding = false;
         tile.Size = new Point(64, 64);
+        var tileBodyDef = new BodyDef();
+        tileBodyDef.position = new Vector2(i, Window.ClientBounds.Height - backgroundTile.Height);
+        tileBodyDef.type = BodyType.Static;
+        tile.Body = physicsSystem.World.CreateBody(tileBodyDef);
       }
 
       var playerEntity = this.entityManager.CreateEntity();
-      playerEntity.Position = Vector2.Zero;
       playerEntity.Velocity = Vector2.Zero;
       playerEntity.Movement = Vector2.Zero;
       playerEntity.Acceleration = 200f;
@@ -95,8 +99,11 @@ namespace TheGame
       playerEntity.FrameTime = .1f;
       playerEntity.Texture = kat;
       playerEntity.LayerDepth = (float)LayerDepths.Characters / 10f;
-      playerEntity.Colliding = false;
       playerEntity.Size = new Point(64, 64);
+      var playerBodyDef = new BodyDef();
+      playerBodyDef.position = Vector2.Zero;
+      playerBodyDef.type = BodyType.Dynamic;
+      playerEntity.Body = physicsSystem.World.CreateBody(playerBodyDef);
 
       Components.Add(new DrawingSystem(this));
       Components.Add(new CollidableOverlay(this));

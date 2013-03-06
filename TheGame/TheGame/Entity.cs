@@ -1,5 +1,6 @@
 ﻿namespace TheGame
 {
+  using Box2D.XNA;
   using Microsoft.Xna.Framework;
   using Microsoft.Xna.Framework.Graphics;
 
@@ -39,7 +40,7 @@
     /// <summary>
     /// Gets or sets this entity's Position
     /// </summary>
-    public Vector2? Position { get; set; }
+    public Vector2? Position { get { return this.Body.Position; } }
 
     /// <summary>
     /// Gets or sets this entity's Velocity
@@ -61,10 +62,7 @@
     /// </summary>
     public Point? Size { get; set; }
 
-    /// <summary>
-    /// Gets or sets a value indicating whether this entity is Colliding
-    /// </summary>
-    public bool? Colliding { get; set; }
+    public Body Body { get; set; }
 
     /// <summary>
     /// Gets or sets this entity's Texture
@@ -96,5 +94,6 @@
     /// </summary>
     public float? FrameTime { get; set; }
     #endregion
+
   }
 }
