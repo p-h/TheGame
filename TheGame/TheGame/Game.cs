@@ -101,7 +101,6 @@ namespace TheGame
       playerEntity.Size = new Point(64, 64);
 
       Components.Add(new DrawingSystem(this));
-      Components.Add(new CollidableOverlay(this));
       Components.Add(new PhysicsSystem(this));
       Components.Add(new AnimationSystem(this));
       Components.Add(new InputSystem(this));
