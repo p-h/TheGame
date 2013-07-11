@@ -33,31 +33,48 @@
         e.FrameTime.HasValue &&
         e.TimeSinceLastFrame.HasValue &&
         e.SourceRectangle.HasValue &&
-        e.Idle.HasValue);
+        e.Idle.HasValue &&
+        e.Movement.HasValue);
+
+      var dt = (float)gameTime.ElapsedGameTime.TotalSeconds;
 
       foreach (var entity in entities)
       {
-        entity.TimeSinceLastFrame += (float)gameTime.ElapsedGameTime.TotalSeconds;
-
-        if (!entity.Idle.Value && entity.TimeSinceLastFrame >= entity.FrameTime)
-        {
-          entity.TimeSinceLastFrame = 0f;
-          var sourceRectangle = entity.SourceRectangle.Value;
-
-          if (sourceRectangle.Right < entity.Texture.Width)
-          {
-            sourceRectangle.X += sourceRectangle.Width;
-          }
-          else
-          {
-            sourceRectangle.X = 0;
-          }
-
-          entity.SourceRectangle = sourceRectangle;
-        }
+        UpdateAnimation(dt, entity);
       }
 
       base.Update(gameTime);
+    }
+
+    private static void UpdateAnimation(float dt, Entity entity)
+    {
+      entity.TimeSinceLastFrame += dt;
+
+      if (!entity.Idle.Value && entity.TimeSinceLastFrame >= entity.FrameTime)
+      {
+        entity.TimeSinceLastFrame = 0f;
+        var sourceRectangle = entity.SourceRectangle.Value;
+
+        if (sourceRectangle.Right < entity.Texture.Width)
+        {
+          sourceRectangle.X += sourceRectangle.Width;
+        }
+        else
+        {
+          sourceRectangle.X = 0;
+        }
+
+        if (entity.Movement.Value.X > .5f)
+        {
+          sourceRectangle.Y = sourceRectangle.Height;
+        }
+        else if (entity.Movement.Value.X < -.5f)
+        {
+          sourceRectangle.Y = 0;
+        }
+
+        entity.SourceRectangle = sourceRectangle;
+      }
     }
   }
 }

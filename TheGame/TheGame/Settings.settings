@@ -1,0 +1,12 @@
+﻿<?xml version='1.0' encoding='utf-8'?>
+<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="TheGame" GeneratedClassName="Settings">
+  <Profiles />
+  <Settings>
+    <Setting Name="PhysicsSystemUpdateRate" Type="System.Single" Scope="Application">
+      <Value Profile="(Default)">0.033333</Value>
+    </Setting>
+    <Setting Name="PixelsPerMeter" Type="System.Single" Scope="Application">
+      <Value Profile="(Default)">64</Value>
+    </Setting>
+  </Settings>
+</SettingsFile>

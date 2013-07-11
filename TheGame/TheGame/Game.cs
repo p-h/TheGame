@@ -73,37 +73,30 @@ namespace TheGame
       var backgroundTile = Content.Load<Texture2D>("background_tile");
       var kat = Content.Load<Texture2D>("kat");
 
-      for (var i = 0; i <= Window.ClientBounds.Width; i += 64)
+      var physicsSystem = new PhysicsSystem(new Vector2(0f, 9.81f));
+
+      var screenWidth = UnitConversion.PixelsToSim(Window.ClientBounds.Width);
+      var screenHeight = UnitConversion.PixelsToSim(Window.ClientBounds.Height);
+      var tileWidth = UnitConversion.PixelsToSim(backgroundTile.Width);
+      var tileHeight = UnitConversion.PixelsToSim(backgroundTile.Height);
+
+      for (var i = 0f; i <= screenWidth; i += tileWidth)
       {
-        var tile = this.entityManager.CreateEntity();
-        tile.Texture = backgroundTile;
-        tile.LayerDepth = (float)LayerDepths.Background / 10f;
-        tile.Position = new Vector2(i, Window.ClientBounds.Height - backgroundTile.Height);
-        tile.Size = new Point(backgroundTile.Bounds.X, backgroundTile.Bounds.Y);
-        tile.Colliding = false;
-        tile.CollisionType = CollisionTypes.Stop;
-        tile.Size = new Point(64, 64);
+        var position = new Vector2(i, screenHeight - tileHeight);
+        var foo = UnitConversion.SimToPixels(position);
+        EntityFactory.CreateTile(this.entityManager, physicsSystem, position, backgroundTile);
       }
 
-      var playerEntity = this.entityManager.CreateEntity();
-      playerEntity.Position = Vector2.Zero;
-      playerEntity.Velocity = Vector2.Zero;
-      playerEntity.Movement = Vector2.Zero;
-      playerEntity.Acceleration = 200f;
-      playerEntity.SourceRectangle = new Rectangle(0, 0, 64, 64);
-      playerEntity.Idle = false;
-      playerEntity.TimeSinceLastFrame = 0f;
-      playerEntity.FrameTime = .1f;
-      playerEntity.Texture = kat;
-      playerEntity.LayerDepth = (float)LayerDepths.Characters / 10f;
-      playerEntity.Colliding = false;
-      playerEntity.CollisionType = CollisionTypes.None;
-      playerEntity.Size = new Point(64, 64);
+      EntityFactory.CreateTile(this.entityManager, physicsSystem, new Vector2(screenWidth - tileWidth, screenHeight - (tileHeight * 2)), backgroundTile);
+      EntityFactory.CreateTile(this.entityManager, physicsSystem, new Vector2(0f, screenHeight - (tileHeight * 2)), backgroundTile);
+
+      EntityFactory.CreatePlayer(this.entityManager, physicsSystem, Vector2.Zero, kat);
 
       Components.Add(new DrawingSystem(this));
-      Components.Add(new PhysicsSystem(this));
+      Components.Add(physicsSystem);
       Components.Add(new AnimationSystem(this));
       Components.Add(new InputSystem(this));
+      Components.Add(new MovementSystem(this));
     }
 
     /// <summary>

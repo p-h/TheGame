@@ -39,18 +39,20 @@
       this.spriteBatch.Begin(SpriteSortMode.FrontToBack, BlendState.AlphaBlend);
 
       var entities = this.entityManager.GetEntitiesWhere(e =>
-        e.Position.HasValue &&
+        e.Body != null &&
         e.Texture != null &&
         e.LayerDepth.HasValue);
 
       foreach (var entity in entities)
       {
+        var position = UnitConversion.SimToPixels(entity.Body.Position);
+
         this.spriteBatch.Draw(
           entity.Texture,
-          entity.Position.Value,
+          position,
           entity.SourceRectangle,
           Color.White,
-          0f,
+          entity.Body.Rotation,
           Vector2.Zero,
           1f,
           SpriteEffects.None,

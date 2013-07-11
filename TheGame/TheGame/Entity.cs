@@ -1,5 +1,6 @@
 ﻿namespace TheGame
 {
+  using FarseerPhysics.Dynamics;
   using Microsoft.Xna.Framework;
   using Microsoft.Xna.Framework.Graphics;
 
@@ -37,11 +38,6 @@
 
     #region Components
     /// <summary>
-    /// Gets or sets this entity's Position
-    /// </summary>
-    public Vector2? Position { get; set; }
-
-    /// <summary>
     /// Gets or sets this entity's Velocity
     /// </summary>
     public Vector2? Velocity { get; set; }
@@ -57,19 +53,16 @@
     public float? Acceleration { get; set; }
 
     /// <summary>
-    /// Gets or sets this entity's Size
-    /// </summary>
-    public Point? Size { get; set; }
-
-    /// <summary>
     /// Gets or sets a value indicating whether this entity is Colliding
     /// </summary>
     public bool? Colliding { get; set; }
 
+    public float? Friction { get; set; }
+
     /// <summary>
-    /// Gets or sets this entity's <see cref="CollisionTypes"/>
+    /// Gets or sets this entity's body
     /// </summary>
-    public CollisionTypes? CollisionType { get; set; }
+    public Body Body { get; set; }
 
     /// <summary>
     /// Gets or sets this entity's Texture
